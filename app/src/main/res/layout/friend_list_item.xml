@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_baseline_tag_faces_24"
+        android:layout_margin="10dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이름"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/profile_image"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/profile_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="가나다라마바사"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/profile_name"
+        app:layout_constraintLeft_toLeftOf="@id/profile_name"
+        android:layout_marginTop="5dp"/>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
