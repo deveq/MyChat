@@ -40,22 +40,22 @@ class ChatMainActivity : AppCompatActivity() {
                     .addOnSuccessListener {
 
 
-                        val friendsRef = db.collection("friends")
-                            .document(auth.currentUser!!.uid)
-                            .collection("nicknames")
-                            .get()
-                            .addOnSuccessListener {
-                                for(i in it) {
-                                    nicknameList.add(i["nickname"] as String)
-                                    Log.d("friends열어보기",i["nickname"] as String)
-                                }
-                            }
+//                        val friendsRef = db.collection("friends")
+//                            .document(auth.currentUser!!.uid)
+//                            .collection("nicknames")
+//                            .get()
+//                            .addOnSuccessListener {
+//                                for(i in it) {
+//                                    nicknameList.add(i["nickname"] as String)
+//                                    Log.d("friends열어보기",i["nickname"] as String)
+//                                }
+//                            }
 
                         val intent = Intent(this, FriendsListActivity::class.java)
 //                        intent.putExtra("nicknames",nicknameList)
-                        val bundle = Bundle()
-                        bundle.putStringArrayList("nick",nicknameList)
-                        intent.putExtra("bundle",bundle)
+//                        val bundle = Bundle()
+//                        bundle.putStringArrayList("nick",nicknameList)
+//                        intent.putExtra("bundle",bundle)
                         startActivity(intent)
 
                     }

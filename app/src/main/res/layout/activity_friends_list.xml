@@ -6,9 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".FriendsListActivity">
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friend_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"/>
+        android:layout_width="327dp"
+        android:layout_height="239dp"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="57dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

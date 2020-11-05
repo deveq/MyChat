@@ -38,6 +38,11 @@ class ChatListActivity : AppCompatActivity() {
 
         }
 
+        toFriends.setOnClickListener {
+            val intent = Intent(this, FriendsListActivity::class.java)
+            startActivity(intent)
+        }
+
 
 
 

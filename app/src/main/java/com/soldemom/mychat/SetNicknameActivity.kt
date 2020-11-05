@@ -75,7 +75,7 @@ class SetNicknameActivity : AppCompatActivity() {
                 val nicknameObject = Profile(nickname, uid!!)
                 myRef.add(nicknameObject)
                     .addOnSuccessListener {
-                        val intent = Intent(this, ChatListActivity::class.java)
+                        val intent = Intent(this, FriendsListActivity::class.java)
                         startActivity(intent)
                     }
             } else {

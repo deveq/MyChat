@@ -2,6 +2,7 @@ package com.soldemom.mychat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -24,42 +25,29 @@ class FriendsListActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        val uid = auth.currentUser!!.uid
 
-       /* val friendsRef = db.collection("friends")
-            .document(auth.currentUser!!.uid)
-            .collection("nicknames")
-            .get()
+
+        val friendsList = arrayListOf<String>()
+
+        // 1. 친구 목록 받아오기
+        db.collection("friends").document(uid).collection("nicknames").get()
             .addOnSuccessListener {
-                for(i in it) {
-                    nicknameList.add(i["nickname"] as String)
-                    Log.d("friends열어보기",i["nickname"] as String)
+                //친구 목록을 받은 뒤 friendsList로 넣어줌
+                for (i in it) {
+                    friendsList.add(i["nickname"] as String)
                 }
-            }*/
 
-        
-        //친구목록 받아오기
-        val bundle = intent.getBundleExtra("bundle")
-        val list = bundle.getStringArrayList("nick")
-
-
-
-        val profileRef = db.collection("nickname")
-            .whereIn("nickname",list!!)
-            .get()
-            .addOnSuccessListener {
-                Log.d("friend열어보기0","????뭐지")
-                for(i in it) {
-                    val profile = i.toObject(Profile::class.java)
-                    profileList.add(profile)
-                    Log.d("friends열어보기2",profile.nickname)
-                }
-                adapter.friendList = profileList
-                adapter.notifyDataSetChanged()
-
+                //friendsList에 넣은 후 해당 목록을 토대로 친구의 프로필을 받아옴.
+                db.collection("nickname").whereIn("nickname",friendsList).get()
+                    .addOnSuccessListener {
+                        //친구의 프로필을 정상적으로 받아왔다면, adapter의 friendList에 넣어줌.
+                        adapter.friendList = it.toObjects(Profile::class.java)
+                        //넣어준 후 recycler view의 데이터가 변경되었음을 알려줌.
+                        adapter.notifyDataSetChanged()
+                    }
             }
-            .addOnFailureListener {
-                Log.d("friends실패","왱?")
-            }
+
 
 
         adapter = FriendAdapter(profileList)
