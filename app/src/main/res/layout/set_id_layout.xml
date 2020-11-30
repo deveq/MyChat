@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="32dp">
+
+    <TextView
+        android:id="@+id/set_id_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아이디 입력"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/set_id_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/set_id_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:text="친구들이 검색할 수 있도록\n 검색용 아이디를 설정해주세요."
+        />
+
+    <EditText
+        android:id="@+id/set_id_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="아이디 입력"
+        app:layout_constraintTop_toBottomOf="@id/set_id_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="16dp"
+        android:inputType="text"
+        />
+
+    <Button
+        android:id="@+id/set_id_duplication_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="중복확인"
+        app:layout_constraintBottom_toBottomOf="@id/set_id_input"
+        app:layout_constraintLeft_toRightOf="@id/set_id_input"/>
+
+    <Button
+        android:id="@+id/set_id_confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아이디 결정"
+        app:layout_constraintTop_toBottomOf="@id/set_id_input"
+        app:layout_constraintLeft_toLeftOf="@id/set_id_input"
+        app:layout_constraintRight_toRightOf="@id/set_id_duplication_button"
+        android:layout_marginTop="16dp"
+        android:clickable="false"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

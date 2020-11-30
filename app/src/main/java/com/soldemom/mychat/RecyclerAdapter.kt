@@ -21,7 +21,7 @@ class RecyclerAdapter(val userList: MutableList<User>,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val user = userList[position]
-        holder.listName.text = user.username
+        holder.listName.text = user.name
         holder.listMessage.text = user.uid
         holder.itemView.setOnClickListener {
             itemClickListener
