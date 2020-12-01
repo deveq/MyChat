@@ -1,6 +1,6 @@
 package com.soldemom.mychat.Model
 
-class User(var uid: String, var name: String) {
+data class User(var uid: String, var name: String) {
     var id: String? = null
     var introduce: String? = null
     var image: String? = null

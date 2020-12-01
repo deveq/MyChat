@@ -26,6 +26,7 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationEnd(animation: Animation?) {
                 val intent = Intent(this@SplashActivity, LoginActivity::class.java)
                 startActivity(intent)
+                finish()
             }
 
             override fun onAnimationRepeat(animation: Animation?) {

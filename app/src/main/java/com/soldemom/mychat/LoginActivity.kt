@@ -40,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
         //로그인이 되어있는 상태라면 바로 MainActivity로
         auth.currentUser?.let {
             startActivity(toMainIntent)
+            finish()
         }
 
         joinView = LayoutInflater.from(this).inflate(R.layout.join_layout, null)

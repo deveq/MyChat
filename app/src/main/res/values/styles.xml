@@ -7,4 +7,34 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.TCTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
+
+    <!--
+    statusBarColor : Status bar를 하얀색으로 만들어줌(시간 보이는 최상단 바)
+    windowDrawsSystemBarBackgrounds : Status bar를 투명하게하여 statusBarColor가 제대로 표현되게 한다.
+    (만약 이 옵션이 없으면 여러색이 섞인듯한 색상이 나타날 수 있음)
+    windowTranslucentStatus : 반투명을 요청하는 flag인지 확인하는것. 반투명이 아니기때문에 false로
+    windowLightStatusBar : 아이콘 색상을 설정해놓은 statusBar의 색상에 어울리는 형태로 자동선택해줌(API23이상)
+    -->
+
 </resources>

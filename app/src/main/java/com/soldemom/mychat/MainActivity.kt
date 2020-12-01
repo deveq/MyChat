@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         userRef = db.collection("users").document(uid)
 
+
         val fragmentNameList = listOf<String>("친구목록","채팅목록","설정")
         val fragmentList = listOf<Fragment>(
             FriendsListFragment(),
