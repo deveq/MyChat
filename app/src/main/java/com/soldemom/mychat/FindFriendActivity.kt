@@ -72,6 +72,8 @@ class FindFriendActivity : AppCompatActivity() {
                 .update("friendsList", FieldValue.arrayUnion(friend.uid))
                 .addOnSuccessListener {
                     Toast.makeText(this, "추가 완료.", Toast.LENGTH_SHORT).show()
+                    intent.putExtra("addedFriend",friend)
+                    setResult(RESULT_OK,intent)
                     finish()
                 }
 
@@ -94,7 +96,6 @@ class FindFriendActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener {
 
-                    // TODO 아래 내용 함수로
                     friend = it.toObject(User::class.java)!!
                     find_friend_view_group.visibility = View.VISIBLE
                     find_friend_no_result.visibility = View.GONE
@@ -109,7 +110,7 @@ class FindFriendActivity : AppCompatActivity() {
                     }
 
                     if (friendsList.contains(friend.uid)) {
-                        // TODO 이미 친구 목록에 있을 경우
+                        // 이미 친구 목록에 있을 경우
                         find_friend_add_button.apply {
                             isClickable = false
                             text = "이미 등록되어있음"
@@ -122,6 +123,7 @@ class FindFriendActivity : AppCompatActivity() {
                             isClickable = true
                             text = "친구추가"
                         }
+
 
                     }
 

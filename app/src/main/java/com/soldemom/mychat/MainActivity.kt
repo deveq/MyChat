@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var idRef: DocumentReference
     lateinit var user: User
     lateinit var viewModel: MainViewModel
+    lateinit var friendsListFragment: FriendsListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,11 +52,14 @@ class MainActivity : AppCompatActivity() {
         uid = auth.currentUser!!.uid
 
         userRef = db.collection("users").document(uid)
+        
+        
 
+        friendsListFragment = FriendsListFragment()
 
         val fragmentNameList = listOf<String>("친구목록","채팅목록","설정")
         val fragmentList = listOf<Fragment>(
-            FriendsListFragment(),
+            friendsListFragment,
             ChatListFragment(),
             SettingFragment()
         )
@@ -154,6 +158,27 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.user = user
         Log.d("친구","${user.friendsList.size}명")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+            Log.d("친구추가","들어온 코드 : $requestCode")
+            Log.d("친구추가","들어온 성공결과 코드 : $resultCode")
+        if (requestCode == REQ_FIND_FRIEND && resultCode == RESULT_OK) {
+            val addedFriend = data!!.getSerializableExtra("addedFriend") as User
+            viewModel.friendsList.add(addedFriend)
+
+            //friendsListAdapter가 viewModel의 객체를 참조하고있어서 viewModel안에 객체만 바꿔줘도
+            //알아서 바꿔주네용 헿..
+            friendsListFragment.friendsListAdapter.notifyDataSetChanged()
+            
+        }
+        
+        
+    }
+
+    companion object {
+        const val REQ_FIND_FRIEND = 7979
     }
 
 }

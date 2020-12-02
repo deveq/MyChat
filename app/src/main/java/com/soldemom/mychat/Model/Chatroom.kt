@@ -9,6 +9,12 @@ class Chatroom() {
         var senderUid: String? = null
         var text: String? = null
 //        var time: Long? = null
-//        var timestamp: Map<String, String>? = null
+        var timestamp: Any? = null
+
+        companion object {
+            const val CHAT_LEFT = 0
+            const val CHAT_RIGHT = 1
+            const val TIME = 2
+        }
     }
 }

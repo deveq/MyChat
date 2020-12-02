@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.soldemom.mychat.R
 import com.soldemom.mychat.main.MainViewModel
 import kotlinx.android.synthetic.main.fragment_chat_list.view.*
@@ -13,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_chat_list.view.*
 
 class ChatListFragment : Fragment() {
     lateinit var viewModel: MainViewModel
+    val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,17 +55,19 @@ class ChatListFragment : Fragment() {
             }
         })
 
-        searchItem.setOnCloseListener {
-            // TODO 검색의 닫기(X)버튼 누른 후 처음 데이터로 돌아가게끔해야함.
-
-            false
-        }
-
-
 
     }
 
     fun setMenu(menu: Menu) {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        db.collection("users").document(viewModel.user.uid).get()
+            .addOnSuccessListener {
+
+            }
 
     }
 }

@@ -58,6 +58,7 @@ class FriendsListFragment : Fragment() {
             friends_list_introduce.text = user.introduce
         }
 
+
         if (user.friendsList.size > 0) {
             db.collection("users").whereIn("uid",user.friendsList).get()
                 .addOnSuccessListener {
@@ -129,7 +130,7 @@ class FriendsListFragment : Fragment() {
             val findFriendIntent = Intent(requireActivity(), FindFriendActivity::class.java)
             findFriendIntent.putExtra("id",user.id)
             findFriendIntent.putExtra("uid",user.uid)
-            startActivity(findFriendIntent)
+            requireActivity().startActivityForResult(findFriendIntent, REQ_FIND_FRIEND)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -142,5 +143,21 @@ class FriendsListFragment : Fragment() {
         chatIntent.putExtra("myUid",user.uid)
         chatIntent.putExtra("destinationUid",desinationUser.uid)
         startActivity(chatIntent)
+    }
+
+
+    // TODO startActivityForResult로 잘 되면 안써도 되고 안되면 이거 써야함
+    fun getFriendsList() {
+        db.collection("users").whereIn("uid",user.friendsList).get()
+            .addOnSuccessListener {
+                val friendsList = it.toObjects(User::class.java)
+                viewModel.friendsList = friendsList
+                friendsListAdapter.friendsList = friendsList
+                friendsListAdapter.notifyDataSetChanged()
+            }
+    }
+
+    companion object {
+        const val REQ_FIND_FRIEND = 7979
     }
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.soldemom.mychat.Model.Chatroom
 import com.soldemom.mychat.Model.User
@@ -31,31 +32,20 @@ class ChatroomActivity : AppCompatActivity() {
         myUser = intent.getSerializableExtra("myUser") as User
         destinationUser = intent.getSerializableExtra("destinationUser") as User
 
-//        val chatroom = Chatroom()
-//        chatroom.users[myUser.uid] = true
-//        chatroom.users[destinationUser.uid] = true
-
-
-
         checkChatRoom()
 
-        val userNames = hashMapOf<String,String>(
-            myUser.uid to myUser.name,
-            destinationUser.uid to destinationUser.name
+        val users = hashMapOf<String,User>(
+            "myUser" to myUser,
+            "destinationUser" to destinationUser
         )
-
-
-
-
 
 
         // TODO 채팅목록을 통해 들어왔을 경우 chatroomId를 바로 intent에서 받아와서 넣어줘야함.
 
 
-
         chatroom_recycler_view.layoutManager = LinearLayoutManager(this)
         chatRecyclerAdapter = ChatRecyclerAdapter()
-        chatRecyclerAdapter.names = userNames
+        chatRecyclerAdapter.users = users
         chatroom_recycler_view.adapter = chatRecyclerAdapter
 
         chatroom_send_button.setOnClickListener {
@@ -67,8 +57,10 @@ class ChatroomActivity : AppCompatActivity() {
                 val comment : Chatroom.Comment = Chatroom.Comment()
                 comment.senderUid = myUser.uid
                 comment.text = text
-//                comment.timestamp = ServerValue.TIMESTAMP
-                commentsRef.push().setValue(comment)
+                comment.timestamp = ServerValue.TIMESTAMP
+                commentsRef.push().setValue(comment).addOnSuccessListener {
+                    chatroom_edit_text.setText("")
+                }
             }
         }
 
@@ -115,28 +107,54 @@ class ChatroomActivity : AppCompatActivity() {
                 chatroomId = chatRef.key
                 myUser.chatList.add(chatroomId!!)
                 //TODO Firestore / users / uid / chatList에 chatroomId 추가해줘야함.
+                val db = FirebaseFirestore.getInstance()
+                val myUserRef =
+                    db.collection("users").document(myUser.uid)
+                val destUserRef =
+                    db.collection("users").document(destinationUser.uid)
+
+                db.runBatch { batch ->
+                    batch.update(myUserRef,"chatList",FieldValue.arrayUnion(chatroomId))
+                    batch.update(destUserRef,"chatList",FieldValue.arrayUnion(chatroomId))
+                }.addOnSuccessListener { 
+                    Log.d("chat","transaction 둘 다 성공")
+
+                }
+                
+                // Firebase와의 연동이 비동기로 이루어지기 때문에 순차적으로 끝나지 않아서
+                // 각각 getComments()를 넣어줌
+                getComments()
             }
         } else {
             Log.d("chat","if문 시작 (else)")
+            getComments()
 
         }
+
+
+    }
+
+    fun getComments() {
+        //TODO chatroomId가 nullPointerException이 뜸
         realtimeDB.getReference("chatrooms").child(chatroomId!!).child("comments")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val commentsList = mutableListOf<Chatroom.Comment>()
                     for (data in snapshot.children) {
                         val comment = data.getValue(Chatroom.Comment::class.java)
-                        commentsList.add(comment!!)
+                        comment?.let {
+                            commentsList.add(it)
+                        }
+
                     }
                     chatRecyclerAdapter.comments = commentsList
                     chatRecyclerAdapter.notifyDataSetChanged()
+                    chatroom_recycler_view.scrollToPosition(chatRecyclerAdapter.comments.size -1)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
 
-
     }
-
 }
