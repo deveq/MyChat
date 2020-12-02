@@ -1,13 +1,17 @@
 package com.soldemom.mychat.main.recycler
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.soldemom.mychat.ChatroomActivity
+import com.soldemom.mychat.Model.Chatroom
 import com.soldemom.mychat.Model.User
 import com.soldemom.mychat.R
 
-class FriendsListAdapter : RecyclerView.Adapter<FriendsListViewHolder>() {
+class FriendsListAdapter(val startChat:(User)->Unit) : RecyclerView.Adapter<FriendsListViewHolder>() {
     var friendsList =  mutableListOf<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsListViewHolder {
@@ -28,6 +32,13 @@ class FriendsListAdapter : RecyclerView.Adapter<FriendsListViewHolder>() {
                 .load(friend.image)
                 .centerCrop()
                 .into(holder.imageView)
+        }
+
+        holder.itemView.setOnClickListener {
+            // RecyclerView를 가진 FriendsListFragment에서 만든 고차함수
+            // 나의 uid와 상대방의 uid를 받아서 intent에 putExtra 한 후
+            // ChatroomActivity로의 intent 실행
+            startChat(friend)
         }
 
     }

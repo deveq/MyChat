@@ -1,6 +1,9 @@
 package com.soldemom.mychat.Model
 
-data class User(var uid: String, var name: String) {
+import android.os.Parcelable
+import java.io.Serializable
+
+data class User(var uid: String, var name: String) : Serializable {
     var id: String? = null
     var introduce: String? = null
     var image: String? = null

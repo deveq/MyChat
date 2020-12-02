@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.soldemom.mychat.ChatroomActivity
 import com.soldemom.mychat.FindFriendActivity
 import com.soldemom.mychat.Model.User
 import com.soldemom.mychat.R
@@ -38,11 +39,13 @@ class FriendsListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_friends_list, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        friendsListAdapter = FriendsListAdapter()
+        //나의 User객체를 viewModel에서 받아옴.
+        user = viewModel.user
+
+        //친구목록 RecyclerView 설정
+        friendsListAdapter = FriendsListAdapter(::startChat)
         view.friends_list_recycler_view.adapter = friendsListAdapter
         view.friends_list_recycler_view.layoutManager = LinearLayoutManager(requireContext())
-
-        user = viewModel.user
 
         view.apply {
             friends_list_profile_name.text = user.name
@@ -129,5 +132,15 @@ class FriendsListFragment : Fragment() {
             startActivity(findFriendIntent)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun startChat(desinationUser: User) {
+        //FriendsListAdapter의 인자로 들어갈 함수. chat실행
+        val chatIntent = Intent(requireActivity(), ChatroomActivity::class.java)
+        chatIntent.putExtra("myUser",user)
+        chatIntent.putExtra("destinationUser",desinationUser)
+        chatIntent.putExtra("myUid",user.uid)
+        chatIntent.putExtra("destinationUid",desinationUser.uid)
+        startActivity(chatIntent)
     }
 }
