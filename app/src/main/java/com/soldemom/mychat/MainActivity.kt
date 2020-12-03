@@ -8,11 +8,14 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -27,6 +30,7 @@ import com.soldemom.mychat.main.fragments.FriendsListFragment
 import com.soldemom.mychat.main.fragments.MainViewPagerAdapter
 import com.soldemom.mychat.main.fragments.SettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_friends_list.view.*
 import kotlinx.android.synthetic.main.set_id_layout.view.*
 
 class MainActivity : AppCompatActivity() {
@@ -122,7 +126,6 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-
             setIdView.set_id_duplication_button.setOnClickListener {
                 setIdView.apply {
                     val id = this.set_id_input.text.toString()
@@ -173,12 +176,30 @@ class MainActivity : AppCompatActivity() {
             friendsListFragment.friendsListAdapter.notifyDataSetChanged()
             
         }
+
+        if (requestCode == REQ_EDIT_PROFILE && resultCode == RESULT_OK) {
+            user = data!!.getSerializableExtra("myUser") as User
+            friendsListFragment.fragView.apply {
+                friends_list_profile_name.text = user.name
+                friends_list_introduce.text = user.introduce
+                user.image?.let {
+                    Glide.with(this)
+                        .load(it)
+                        .centerCrop()
+                        .into(friends_list_profile_img)
+                }
+
+            }
+
+
+        }
         
         
     }
 
     companion object {
         const val REQ_FIND_FRIEND = 7979
+        const val REQ_EDIT_PROFILE = 1004
     }
 
 }

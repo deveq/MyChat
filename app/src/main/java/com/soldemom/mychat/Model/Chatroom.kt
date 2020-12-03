@@ -10,6 +10,8 @@ class Chatroom() {
         var text: String? = null
 //        var time: Long? = null
         var timestamp: Any? = null
+        var readUsers = hashMapOf<String, Any>()
+
 
         companion object {
             const val CHAT_LEFT = 0

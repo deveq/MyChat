@@ -1,6 +1,8 @@
 package com.soldemom.mychat.chat
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soldemom.mychat.Model.Chatroom
@@ -43,6 +45,13 @@ class ChatRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 holder as ChatRightViewHolder
                 holder.messageView.text = comment.text
                 holder.timeView.text = sdf.format(comment.timestamp)
+
+                if (comment.readUsers.size == 2) {
+                    holder.readView.visibility = View.INVISIBLE
+                } else {
+                    holder.readView.visibility = View.VISIBLE
+                }
+
             }
             users["destinationUser"]!!.uid -> {
                 holder as ChatLeftViewHolder

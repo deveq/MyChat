@@ -2,7 +2,6 @@ package com.soldemom.mychat.main.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.soldemom.mychat.ChatroomActivity
+import com.soldemom.mychat.EditProfileActivity
 import com.soldemom.mychat.FindFriendActivity
 import com.soldemom.mychat.Model.User
 import com.soldemom.mychat.R
@@ -26,6 +26,7 @@ class FriendsListFragment : Fragment() {
     val db = FirebaseFirestore.getInstance()
     lateinit var friendsListAdapter: FriendsListAdapter
     val searchFriendsList = mutableListOf<User>()
+    lateinit var fragView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +37,7 @@ class FriendsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_friends_list, container, false)
+        fragView = inflater.inflate(R.layout.fragment_friends_list, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         //나의 User객체를 viewModel에서 받아옴.
@@ -44,10 +45,10 @@ class FriendsListFragment : Fragment() {
 
         //친구목록 RecyclerView 설정
         friendsListAdapter = FriendsListAdapter(::startChat)
-        view.friends_list_recycler_view.adapter = friendsListAdapter
-        view.friends_list_recycler_view.layoutManager = LinearLayoutManager(requireContext())
+        fragView.friends_list_recycler_view.adapter = friendsListAdapter
+        fragView.friends_list_recycler_view.layoutManager = LinearLayoutManager(requireContext())
 
-        view.apply {
+        fragView.apply {
             friends_list_profile_name.text = user.name
             user.image?.let {
                 Glide.with(this)
@@ -57,6 +58,15 @@ class FriendsListFragment : Fragment() {
             }
             friends_list_introduce.text = user.introduce
         }
+
+        // 이미지를 누르면 프로필 수정으로
+        fragView.friends_list_profile_img.setOnClickListener {
+            val editProfileIntent = Intent(requireActivity(), EditProfileActivity::class.java)
+            editProfileIntent.putExtra("myUser",user)
+            requireActivity().startActivityForResult(editProfileIntent, REQ_EDIT_PROFILE)
+
+        }
+
 
 
         if (user.friendsList.size > 0) {
@@ -72,11 +82,11 @@ class FriendsListFragment : Fragment() {
         }
 
 
-        val toolbar =view.friends_list_toolbar
+        val toolbar =fragView.friends_list_toolbar
         toolbar.title = "친구목록"
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
-        return view
+        return fragView
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -159,5 +169,6 @@ class FriendsListFragment : Fragment() {
 
     companion object {
         const val REQ_FIND_FRIEND = 7979
+        const val REQ_EDIT_PROFILE = 1004
     }
 }

@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.soldemom.mychat.LoginActivity
 import com.soldemom.mychat.R
@@ -18,6 +20,7 @@ class SettingFragment : Fragment() {
     lateinit var viewModel: MainViewModel
 
     val auth = Firebase.auth
+    val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,12 +31,15 @@ class SettingFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         view.setting_logout.setOnClickListener {
-            auth.signOut()
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
-            startActivity(intent)
+
+            db.collection("users").document(viewModel.user.uid)
+                .update("fcmToken", FieldValue.delete())
+                .addOnSuccessListener {
+                    auth.signOut()
+                    val intent = Intent(requireActivity(), LoginActivity::class.java)
+                    startActivity(intent)
+                }
         }
-
-
         return view
     }
 }

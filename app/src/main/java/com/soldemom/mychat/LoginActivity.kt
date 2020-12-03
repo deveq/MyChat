@@ -115,4 +115,9 @@ class LoginActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
+    //현재 기기에서 사용중인 토큰 확인인
+   fun getToken() {
+        //8분 25초
+    }
 }
