@@ -61,33 +61,58 @@ Firebase Authentication의 email로그인(회원가입)을 한 후<br>
 #### 프로필 수정
 ![editProfile](https://user-images.githubusercontent.com/66777885/101208893-310fd100-36b6-11eb-9b44-418dd998837e.gif)<br>
 
+친구목록 Fragment에서 자신의 프로필을 누르면 EditProfileActivity로 이동하게됩니다.<br>
+이동한 후 수정을 완료하였을 경우 수정완료버튼을 통해<br>
+이미지는 Storage에, User객체는 Image의 Uri를 받은 후 Firestore에 저장됩니다.
+
 
 #### 친구 추가 및 찾기
 1. 친구추가<br>
-![addFriend2](https://user-images.githubusercontent.com/66777885/101213472-c6629380-36bd-11eb-9c01-61c4cdef1ab9.gif)
+![addFriend2](https://user-images.githubusercontent.com/66777885/101213472-c6629380-36bd-11eb-9c01-61c4cdef1ab9.gif)<br>
 
 친구목록 창 상단 Toolbar의 +버튼을 통해 친구추가할 수 있습니다.<br>
 친구추가는 3가지 경우로 나뉩니다.<br>
-ㄱ. 새로운 친구를 검색한 경우
-ㄴ. 이미 존재하는 친구를 검색한 경우
-ㄷ. 자신을 검색한 경우
-ㄱ,ㄴ,ㄷ 모두 다른 View를 보여줍니다.
+ㄱ. 새로운 친구를 검색한 경우<br>
+ㄴ. 이미 존재하는 친구를 검색한 경우<br>
+ㄷ. 자신을 검색한 경우<br>
+ ㄱ,ㄴ,ㄷ 모두 다른 View를 보여줍니다.<br>
 
-2. 목록에서 검색
-![searchFriends](https://user-images.githubusercontent.com/66777885/101213632-00cc3080-36be-11eb-9dd9-2864dea4036f.gif)
-추가되어있는 친구 목록에서 친구의 이름을 통해 찾을 수 있습니다.
-SearchView에 OnQueryTextListener를 추가하고, onQueryTextChange를 override하여 입력된 문자가 변경될때마다 검색결과를 보여줍니다.
+2. 목록에서 이름 검색<br>
+![searchFriends](https://user-images.githubusercontent.com/66777885/101213632-00cc3080-36be-11eb-9dd9-2864dea4036f.gif)<br>
+
+추가되어있는 친구 목록에서 친구의 이름을 통해 찾을 수 있습니다.<br>
+SearchView에 OnQueryTextListener를 추가하고<br>
+onQueryTextChange를 override하여 입력된 문자가 변경될때마다 검색결과를 보여줍니다.<br>
 
 #### 채팅
 ![chatNreadCheck](https://user-images.githubusercontent.com/66777885/101208859-248b7880-36b6-11eb-83ff-1dca91277dc7.gif) <br>
-이전 프로젝트와는 달리 RecyclerView의 ViewHolder를 3가지로 나눴습니다
-ㄱ. 상대방 채팅의 ViewHolder
-ㄴ. 내 채팅의 ViewHolder
-ㄷ. 날짜 ViewHolder
-날짜의 경우 temp를 이용해 Comment객체의 timestamp를 날짜로 표현하는 방식을 이용했습니다.
 
-1. 읽음 표시
-2. 채팅방 가장 마지막 채팅
+1. 3가지 ViewHolder
+이전 프로젝트와는 달리 RecyclerView의 ViewHolder를 3가지로 나눴습니다<br>
+ㄱ. 상대방 채팅의 ViewHolder<br>
+ㄴ. 내 채팅의 ViewHolder<br>
+ㄷ. 날짜 ViewHolder<br>
+날짜의 경우 temp를 이용해 Comment객체의 timestamp를 날짜로 표현하는 방식을 이용했습니다.<br>
+
+2. 읽음 표시<br>
+RealtimeDatabase를 이용해 Chatroom객체의 reference를 얻은 뒤, Comment객체를 얻어옵니다.<br>
+만약 읽은 상태라면 readUser에 자신의 uid와 함께 true값을 넣어줍니다.<br>
+현재는 1:1채팅만 구현해놓은 상태이므로, readUser.size != 2 라면 아직 상대방이 읽지 않은 상태이므로<br>
+나의 말풍선에 숫자 1을 나타내고<br>
+만약 readUser.size == 2 라면 상대방이 읽었다는것을 의미하므로<br>
+나의 말풍선에 숫자 1이 사라지게 됩니다.<br>
+
+3. 채팅방 가장 마지막 채팅<br>
+<pre><code>
+    val treeMap = TreeMap<String, Comment>(Collection.reverseOrder())
+    treeMap.put("comment의 key값", comment)
+</code></pre>
+RealtimeDatabase에 Comment값이 들어갈때는 push()메서드를 이용하므로 key값이 시간에 따라 자동지정됩니다.
+그러므로 TreeMap의 key값에 참조의 key값의(commentRef.push().key()) 내림차순으로 정렬하면 가장 최근의 Comment값을 얻을 수 있으므로에
+채팅목록에 표시될 가장 마지막 채팅과 시간을 나타낼 수 있습니다.
+Firestore의 경우 FieldValue.serverTimestamp()를 통해 서버시간을 넣어줄 수 있었지만,
+RealtimeDatabase의 경우 ServerValue.TIMESTAMP를 통해 서버시간을 얻었지만 타입이 Map<String, String>이었기 때문에 Comment객체에 들어가는 timestamp의 타입은 Any여야합니다.
+(넣어줄때는 Map으로 넣었다 하더라도 서버에는 Long으로 저장되고 받을때도 Long으로 받아지므로)
 
 
 #### 푸시 알림
