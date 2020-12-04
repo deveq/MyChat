@@ -63,9 +63,9 @@ Firebase Authentication의 email로그인(회원가입)을 한 후<br>
 
 친구목록 Fragment에서 자신의 프로필을 누르면 EditProfileActivity로 이동하게됩니다.<br>
 이동한 후 수정을 완료하였을 경우 수정완료버튼을 통해<br>
-이미지는 Storage에, User객체는 Image의 Uri를 받은 후 Firestore에 저장됩니다.
+이미지는 Storage에, User객체는 Image의 Uri를 받은 후 Firestore에 저장됩니다.<br><br>
 
-<br>
+
 #### 친구 추가 및 찾기<br>
 1. 친구추가<br><br>
 ![addFriend2](https://user-images.githubusercontent.com/66777885/101213472-c6629380-36bd-11eb-9c01-61c4cdef1ab9.gif)<br><br>
@@ -87,14 +87,14 @@ SearchView에 OnQueryTextListener를 추가하고<br>
 onQueryTextChange를 override하여 입력된 문자가 변경될때마다 검색결과를 보여줍니다.<br><br>
 
 #### 채팅
-![chatNreadCheck](https://user-images.githubusercontent.com/66777885/101208859-248b7880-36b6-11eb-83ff-1dca91277dc7.gif) <br>
+![chatNreadCheck](https://user-images.githubusercontent.com/66777885/101208859-248b7880-36b6-11eb-83ff-1dca91277dc7.gif) <br><br>
 
 1. 3가지 ViewHolder
 이전 프로젝트와는 달리 RecyclerView의 ViewHolder를 3가지로 나눴습니다<br>
 ㄱ. 상대방 채팅의 ViewHolder<br>
 ㄴ. 내 채팅의 ViewHolder<br>
 ㄷ. 날짜 ViewHolder<br>
-날짜의 경우 temp를 이용해 Comment객체의 timestamp를 날짜로 표현하는 방식을 이용했습니다.<br>
+날짜의 경우 temp를 이용해 Comment객체의 timestamp를 날짜로 표현하는 방식을 이용했습니다.<br><br>
 
 2. 읽음 표시<br>
 RealtimeDatabase를 이용해 Chatroom객체의 reference를 얻은 뒤, Comment객체를 얻어옵니다.<br>
@@ -102,7 +102,7 @@ RealtimeDatabase를 이용해 Chatroom객체의 reference를 얻은 뒤, Comment
 현재는 1:1채팅만 구현해놓은 상태이므로, readUser.size != 2 라면 아직 상대방이 읽지 않은 상태이므로<br>
 나의 말풍선에 숫자 1을 나타내고<br>
 만약 readUser.size == 2 라면 상대방이 읽었다는것을 의미하므로<br>
-나의 말풍선에 숫자 1이 사라지게 됩니다.<br>
+나의 말풍선에 숫자 1이 사라지게 됩니다.<br><br>
 
 3. 채팅방 가장 마지막 채팅<br>
 <pre><code>
@@ -114,16 +114,16 @@ RealtimeDatabase에 Comment값이 들어갈때는 push()메서드를 이용하�
 채팅목록에 표시될 가장 마지막 채팅과 시간을 나타낼 수 있습니다.
 Firestore의 경우 FieldValue.serverTimestamp()를 통해 서버시간을 넣어줄 수 있었지만,
 RealtimeDatabase의 경우 ServerValue.TIMESTAMP를 통해 서버시간을 얻었지만 타입이 Map<String, String>이었기 때문에 Comment객체에 들어가는 timestamp의 타입은 Any여야합니다.
-(넣어줄때는 Map으로 넣었다 하더라도 서버에는 Long으로 저장되고 받을때도 Long으로 받아지므로)
+(넣어줄때는 Map으로 넣었다 하더라도 서버에는 Long으로 저장되고 받을때도 Long으로 받아지므로)<br><br>
 
 
-#### 푸시 알림
-![pushNotification](https://user-images.githubusercontent.com/66777885/101213594-f14ce780-36bd-11eb-993d-9cf513dc1538.gif)<br>
+#### 푸시 알림<br>
+![pushNotification](https://user-images.githubusercontent.com/66777885/101213594-f14ce780-36bd-11eb-993d-9cf513dc1538.gif)<br><br>
 
 Firebase Cloud Messaging을 이용해 푸시 알림을 구현하였습니다.<br>
 로그인이 완료된 이후 token을 얻어 Firestore의 User객체에 token값을 추가합니다.<br>
 상대방에게 채팅을 보내면 token과 보낸사람이름(title), 내용(content)가 Retrofit을 이용해 POST Method로 요청되고<br>
-서버에서는 받은 데이터들을 FCM서버에 요청하는 방식으로 진행됩니다.<br>
+서버에서는 받은 데이터들을 FCM서버에 요청하는 방식으로 진행됩니다.<br><br>
 
 ### 마치며
 MyChat은 바로 직전에 완성된 Study Together보다 조금 더 일찍 구상한 프로젝트이지만<br>
@@ -132,7 +132,7 @@ MyChat은 바로 직전에 완성된 Study Together보다 조금 더 일찍 구�
 기존에 얕게 알고 있었던 기능들에 대해 좀 더 활용할 수 있는 방향으로 진행하였습니다.<br>
 그 덕분에 코드를 쓰면서도 이해가 잘 되지 않았던 부분들을 배울 수 있는 좋은 기회가 되었습니다.<br>
 특히 Fragment와 Activity간의 생명주기에 대해 조금 더 익힐 수 있었고<br>
-ViewModel의 Onwer에 대한 개념을 좀 더 깊히 이해할 수 있게 되었습니다.
+ViewModel의 Onwer에 대한 개념을 좀 더 깊히 이해할 수 있게 되었습니다.<br><br>
 
 
 
