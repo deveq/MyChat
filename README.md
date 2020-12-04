@@ -127,6 +127,8 @@ Comment객체에 내에 있는 timestamp의 타입은 Any으로 선언해야합�
 
 Firebase Cloud Messaging을 이용해 푸시 알림을 구현하였습니다.<br>
 로그인이 완료된 이후 token을 얻어 Firestore의 User객체에 token값을 추가합니다.<br>
+(서버에 token이 있을 경우 로그아웃을 하더라도 해당 토큰을 가진 기기로 푸시알림이 가기 때문에<br>
+로그아웃 시에는 token을 지워주어야합니다.) <br><br>
 상대방에게 채팅을 보내면 token과 보낸사람이름(title), 내용(content)가 Retrofit을 이용해 POST Method로 요청되고<br>
 서버에서는 받은 데이터들을 FCM서버에 요청하는 방식으로 진행됩니다.<br><br>
 
