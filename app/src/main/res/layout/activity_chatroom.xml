@@ -9,36 +9,33 @@
 
     <EditText
         android:id="@+id/chatroom_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="4dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatroom_recycler_view" />
+        app:layout_constraintLeft_toLeftOf="@id/chatroom_recycler_view"
+        app:layout_constraintRight_toLeftOf="@id/chatroom_send_button"
+        android:layout_marginBottom="4dp"
+        />
+
 
     <Button
         android:id="@+id/chatroom_send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="41dp"
-        android:layout_marginRight="41dp"
-        android:layout_marginBottom="31dp"
         android:text="보내기"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/chatroom_recycler_view" />
+        app:layout_constraintEnd_toEndOf="@+id/chatroom_recycler_view"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatroom_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="44dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

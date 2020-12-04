@@ -78,6 +78,7 @@
         android:background="#acacac"
         app:layout_constraintTop_toBottomOf="@+id/join_btn"
         android:layout_marginTop="32dp"
+        android:visibility="gone"
         />
     <TextView
         android:layout_width="wrap_content"

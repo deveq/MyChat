@@ -40,7 +40,6 @@ class FriendsListAdapter(val startChat:(User)->Unit) : RecyclerView.Adapter<Frie
             // ChatroomActivity로의 intent 실행
             startChat(friend)
         }
-
     }
 
     override fun getItemCount(): Int {

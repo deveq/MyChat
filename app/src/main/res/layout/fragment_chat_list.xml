@@ -30,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/chat_list_horizon1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginLeft="16dp"
         />
 
 

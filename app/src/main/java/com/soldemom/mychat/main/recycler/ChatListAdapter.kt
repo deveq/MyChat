@@ -29,6 +29,7 @@ class ChatListAdapter(val myUser: User,
         // TODO chatList<String> 객체안에 있는 chatroomId를 이용해서 서버에서 Chatroom객체를 받아옴.
         // 내 uid와 같지 않은 uid를 얻은 다음 해당 uid의 User객체를 firestore에서 얻음
         val chatroomId = myUser.chatList[position]
+//        val chatroomId = myUser.chatList[position]
         val chatroom = chatrooms[chatroomId]
         var destUser: User
         var destinationUid: String = ""
@@ -67,6 +68,8 @@ class ChatListAdapter(val myUser: User,
             holder.lastTextView.text = comment.text
             holder.timeView.text = sdf.format(comment.timestamp)
         }
+
+
         
 
     }

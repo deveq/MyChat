@@ -4,6 +4,8 @@ class Chatroom() {
 
     var users: HashMap<String, Boolean> = hashMapOf()
     var comments: HashMap<String, Comment> = hashMapOf()
+    //채팅목록에서 채팅을 정렬하기 위해서 timestamp를 넣어줌.
+    var timestamp: Any? = null
 
     class Comment() {
         var senderUid: String? = null

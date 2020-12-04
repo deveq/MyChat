@@ -9,6 +9,7 @@ data class User(var uid: String, var name: String) : Serializable {
     var image: String? = null
     var friendsList = mutableListOf<String>()
     var chatList = mutableListOf<String>()
+    var fcmToken: String? = null
 
     constructor() : this("","")
 

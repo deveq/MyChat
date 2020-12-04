@@ -19,11 +19,14 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.soldemom.mychat.Model.User
 import com.soldemom.mychat.main.MainViewModel
 import com.soldemom.mychat.main.fragments.ChatListFragment
@@ -33,6 +36,7 @@ import com.soldemom.mychat.main.fragments.SettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_friends_list.view.*
 import kotlinx.android.synthetic.main.set_id_layout.view.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -84,6 +88,9 @@ class MainActivity : AppCompatActivity() {
                     tab.text = fragmentNameList[position]
                 }.attach()
             }
+
+        FieldValue.serverTimestamp()
+        ServerValue.TIMESTAMP
 
 
 
@@ -173,14 +180,14 @@ class MainActivity : AppCompatActivity() {
             val addedFriend = data!!.getSerializableExtra("addedFriend") as User
             viewModel.friendsList.add(addedFriend)
 
-            //friendsListAdapter가 viewModel의 객체를 참조하고있어서 viewModel안에 객체만 바꿔줘도
-            //알아서 바꿔주네용 헿..
+            friendsListFragment.friendsListAdapter.friendsList = viewModel.friendsList
             friendsListFragment.friendsListAdapter.notifyDataSetChanged()
             
         }
 
         if (requestCode == REQ_EDIT_PROFILE && resultCode == RESULT_OK) {
             user = data!!.getSerializableExtra("myUser") as User
+            viewModel.user = user
             friendsListFragment.fragView.apply {
                 friends_list_profile_name.text = user.name
                 friends_list_introduce.text = user.introduce
@@ -199,13 +206,22 @@ class MainActivity : AppCompatActivity() {
         
     }
 
-    companion object {
-        const val REQ_FIND_FRIEND = 7979
-        const val REQ_EDIT_PROFILE = 1004
-    }
-    //현재 기기에서 사용중인 토큰 확인인
+    //현재 기기에서 사용중인 토큰 확인
     fun getToken() {
-        //8분 25초
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            db.collection("users")
+                .document(uid)
+                .update("fcmToken", task.result)
+
+        }
+
+        /*
+        @Deprecated 되었음
+
         FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.e("LoginActivity", "인스턴스 아이디를 가져오지 못함", task.exception)
@@ -216,7 +232,13 @@ class MainActivity : AppCompatActivity() {
             db.collection("users")
                 .document(uid)
                 .update("fcmToken",task.result!!.token)
-        }
+        }*/
     }
+
+    companion object {
+        const val REQ_FIND_FRIEND = 7979
+        const val REQ_EDIT_PROFILE = 1004
+    }
+
 
 }

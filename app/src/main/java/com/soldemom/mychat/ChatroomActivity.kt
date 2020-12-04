@@ -3,6 +3,7 @@ package com.soldemom.mychat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.tasks.OnSuccessListener
@@ -12,9 +13,15 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.soldemom.mychat.Model.Chatroom
+import com.soldemom.mychat.Model.FcmReqModel
 import com.soldemom.mychat.Model.User
 import com.soldemom.mychat.chat.ChatRecyclerAdapter
+import com.soldemom.mychat.fcm.RetrofitHelper
+import com.soldemom.mychat.fcm.RetrofitService
 import kotlinx.android.synthetic.main.activity_chatroom.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 
 class ChatroomActivity : AppCompatActivity() {
@@ -32,6 +39,11 @@ class ChatroomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chatroom)
 
+
+
+
+
+
         myUser = intent.getSerializableExtra("myUser") as User
         destinationUser = intent.getSerializableExtra("destinationUser") as User
         chatroomId = intent.getStringExtra("chatroomId")
@@ -45,9 +57,8 @@ class ChatroomActivity : AppCompatActivity() {
             "destinationUser" to destinationUser
         )
 
-
-        // TODO 채팅목록을 통해 들어왔을 경우 chatroomId를 바로 intent에서 받아와서 넣어줘야함.
-
+        val retrofit = RetrofitHelper.getRetrofit()
+        val retrofitService = retrofit.create(RetrofitService::class.java)
 
         chatroom_recycler_view.layoutManager = LinearLayoutManager(this)
         chatRecyclerAdapter = ChatRecyclerAdapter()
@@ -64,12 +75,53 @@ class ChatroomActivity : AppCompatActivity() {
                 comment.senderUid = myUser.uid
                 comment.text = text
                 comment.timestamp = ServerValue.TIMESTAMP
-                commentsRef.push().setValue(comment).addOnSuccessListener {
+                //여기에서 Chatroom객체의 timestamp도 바꿔줘야함.
+//                commentsRef.push().setValue(comment).addOnSuccessListener {
+//                    chatroom_edit_text.setText("")
+//                }
+
+                val chatroomRef = realtimeDB.getReference("chatrooms").child(chatroomId!!)
+                chatroomRef.updateChildren(hashMapOf<String, Any>(
+                        "timestamp" to ServerValue.TIMESTAMP,
+                        "comments/${chatroomRef.push().key}" to comment
+                    )).addOnSuccessListener {
                     chatroom_edit_text.setText("")
+                }
+
+
+//                "comments/${commentsRef.push().key}" to comment
+//                "timestamp" to ServerValue.TIMESTAMP
+
+
+
+
+                destinationUser.fcmToken?.let {
+                    val req = FcmReqModel(it, myUser.name, text)
+                    retrofitService.requestPush(req).enqueue(object : Callback<String> {
+                        override fun onResponse(call: Call<String>, response: Response<String>) {
+                        }
+
+                        override fun onFailure(call: Call<String>, t: Throwable) {
+                            t.printStackTrace()
+                        }
+                    })
+
+                }
+            }
+        } // send_button의 onClickListener - 끝
+
+
+        //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        //이건 했더니 recyclerView 최상단이 짤림... ㅠㅠ
+        //recyclerView 뿐만 아니라 모든 뷰의 포지션이 변경될때 사용할 수 있음!
+        chatroom_recycler_view.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                val rv = chatroom_recycler_view
+                if (rv.adapter!!.itemCount != 0) {
+                    rv.smoothScrollToPosition(rv.adapter!!.itemCount -1)
                 }
             }
         }
-
 
     }
 
@@ -145,7 +197,6 @@ class ChatroomActivity : AppCompatActivity() {
         //TODO chatroomId가 nullPointerException이 뜸
         getCommentRef = realtimeDB.getReference("chatrooms").child(chatroomId!!).child("comments")
         getCommentRef.addValueEventListener(getCommentsEventListener)
-//        getCommentRef.addListenerForSingleValueEvent(getCommentsEventListener)
     }
 
     val getCommentsEventListener = object : ValueEventListener {
@@ -182,18 +233,7 @@ class ChatroomActivity : AppCompatActivity() {
                     .child(chatroomId!!)
                     .child("comments")
                     .updateChildren(readUsersMap)
-                    /*.addOnCompleteListener {
-                        //얘는 계속 되어야함.
-                        chatRecyclerAdapter.comments = commentsList
-                        chatRecyclerAdapter.notifyDataSetChanged()
-                        chatroom_recycler_view.scrollToPosition(chatRecyclerAdapter.comments.size - 1)
-                    }*/
             }
-
-            //comment를 읽어오기 위해서는 지속감시해야함
-            //comment를 읽은 후
-            //읽음 표시 기능
-            //만약 readUsers에 내가 있다면 하지않고, 없다면 하기
             chatRecyclerAdapter.comments = commentsList
             chatRecyclerAdapter.notifyDataSetChanged()
             chatroom_recycler_view.scrollToPosition(chatRecyclerAdapter.comments.size - 1)
@@ -207,7 +247,5 @@ class ChatroomActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         getCommentRef.removeEventListener(getCommentsEventListener)
-        //액티비티를 벗어나도 계속 갖고오는거 중단.
-
     }
 }

@@ -1,6 +1,7 @@
 package com.soldemom.mychat.main.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -22,6 +23,8 @@ import com.soldemom.mychat.main.MainViewModel
 import com.soldemom.mychat.main.recycler.ChatListAdapter
 import kotlinx.android.synthetic.main.activity_chatroom.view.*
 import kotlinx.android.synthetic.main.fragment_chat_list.view.*
+import java.util.*
+import kotlin.Comparator
 
 
 class ChatListFragment : Fragment() {
@@ -44,17 +47,20 @@ class ChatListFragment : Fragment() {
         fragView = inflater.inflate(R.layout.fragment_chat_list, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
+        db.collection("users").document(viewModel.user.uid).get()
+            .addOnSuccessListener {
+                viewModel.user = it.toObject(User::class.java)!!
+
+                chatListAdapter = ChatListAdapter(viewModel.user, ::startChat)
+
+                getChatList()
+            }
+
         val toolbar = fragView.chat_list_toolbar
         toolbar.title = "채팅목록"
+        toolbar.setBackgroundColor(Color.parseColor("#0D2A81"))
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"))
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-
-        chatListAdapter = ChatListAdapter(viewModel.user, ::startChat)
-
-        getChatList()
-
-
-        //TODO 서버에 chatroom 객체가 하나도 없는 유저에 대한 처리
-
 
 
         return fragView
@@ -74,8 +80,10 @@ class ChatListFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val chatrooms = hashMapOf<String, Chatroom>()
                     snapshot.children.forEach {
-                        chatrooms.put(it.key!!, it.getValue(Chatroom::class.java)!!)
+                        val tempChatroom = it.getValue(Chatroom::class.java)!!
+                        chatrooms[it.key!!] = tempChatroom
                     }
+
                     if (fragView.chat_list_recycler_view.adapter == null) {
                         fragView.chat_list_recycler_view.adapter = chatListAdapter
                     }
@@ -97,5 +105,9 @@ class ChatListFragment : Fragment() {
         intent.putExtra("destinationUser",destUser)
         intent.putExtra("chatroomId",chatroomId)
         startActivity(intent)
+    }
+
+    var treeComparator = Comparator<String> { chat1, chat2 ->
+        chat1.compareTo(chat2) * -1
     }
 }

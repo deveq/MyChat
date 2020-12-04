@@ -1,6 +1,7 @@
 package com.soldemom.mychat.main.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -60,7 +61,7 @@ class FriendsListFragment : Fragment() {
         }
 
         // 이미지를 누르면 프로필 수정으로
-        fragView.friends_list_profile_img.setOnClickListener {
+        fragView.friends_list_my_profile.setOnClickListener {
             val editProfileIntent = Intent(requireActivity(), EditProfileActivity::class.java)
             editProfileIntent.putExtra("myUser",user)
             requireActivity().startActivityForResult(editProfileIntent, REQ_EDIT_PROFILE)
@@ -84,6 +85,8 @@ class FriendsListFragment : Fragment() {
 
         val toolbar =fragView.friends_list_toolbar
         toolbar.title = "친구목록"
+        toolbar.setBackgroundColor(Color.parseColor("#0D2A81"))
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"))
         (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
 
         return fragView

@@ -70,7 +70,7 @@ class ChatMessagingService : FirebaseMessagingService() {
         builder.setContentIntent(contentIntent)
 
 
-        builder.setSmallIcon(android.R.drawable.ic_notification_overlay)
+        builder.setSmallIcon(android.R.mipmap.sym_def_app_icon)
             .setContentTitle(title)
             .setWhen(System.currentTimeMillis())
             .setContentText(content)
