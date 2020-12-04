@@ -22,6 +22,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.soldemom.mychat.Model.User
 import com.soldemom.mychat.main.MainViewModel
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         auth = Firebase.auth
         uid = auth.currentUser!!.uid
+        getToken()
 
         userRef = db.collection("users").document(uid)
         
@@ -200,6 +202,21 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val REQ_FIND_FRIEND = 7979
         const val REQ_EDIT_PROFILE = 1004
+    }
+    //현재 기기에서 사용중인 토큰 확인인
+    fun getToken() {
+        //8분 25초
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.e("LoginActivity", "인스턴스 아이디를 가져오지 못함", task.exception)
+                return@addOnCompleteListener
+            }
+
+            Log.d("LoginActivity", "토큰값 : ${task.result!!.token}")
+            db.collection("users")
+                .document(uid)
+                .update("fcmToken",task.result!!.token)
+        }
     }
 
 }

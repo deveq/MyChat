@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.soldemom.mychat.Model.User
 import kotlinx.android.synthetic.main.activity_login.*
@@ -33,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         auth = Firebase.auth
+
+
 
         // MainActivity로 가는 intent
         toMainIntent = Intent(this, MainActivity::class.java)
@@ -116,8 +119,5 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    //현재 기기에서 사용중인 토큰 확인인
-   fun getToken() {
-        //8분 25초
-    }
+
 }
