@@ -52,11 +52,11 @@ ID를 통해 친구를 추가하고, 추가한 친구와 1:1대화를 할 수 �
 
 
 ### 완성화면
-#### 가입 및 로그인
-![joinNsetId](https://user-images.githubusercontent.com/66777885/101208924-3b31cf80-36b6-11eb-8d09-a228d4863cb6.gif)
+#### 가입 및 로그인<br>
+![joinNsetId](https://user-images.githubusercontent.com/66777885/101208924-3b31cf80-36b6-11eb-8d09-a228d4863cb6.gif)<br>
 
 Firebase Authentication의 email로그인(회원가입)을 한 후<br>
-만약 친구추가를 위해 사용할 ID가 지정되어있지 않다면 ID를 설정하는 다이얼로그가 show됩니다.<br>
+만약 친구추가를 위해 사용할 ID가 지정되어있지 않다면 ID를 설정하는 다이얼로그가 show됩니다.<br><br>
 
 #### 프로필 수정
 ![editProfile](https://user-images.githubusercontent.com/66777885/101208893-310fd100-36b6-11eb-9b44-418dd998837e.gif)<br>
@@ -65,24 +65,26 @@ Firebase Authentication의 email로그인(회원가입)을 한 후<br>
 이동한 후 수정을 완료하였을 경우 수정완료버튼을 통해<br>
 이미지는 Storage에, User객체는 Image의 Uri를 받은 후 Firestore에 저장됩니다.
 
-
-#### 친구 추가 및 찾기
-1. 친구추가<br>
-![addFriend2](https://user-images.githubusercontent.com/66777885/101213472-c6629380-36bd-11eb-9c01-61c4cdef1ab9.gif)<br>
+<br>
+#### 친구 추가 및 찾기<br>
+1. 친구추가<br><br>
+![addFriend2](https://user-images.githubusercontent.com/66777885/101213472-c6629380-36bd-11eb-9c01-61c4cdef1ab9.gif)<br><br>
 
 친구목록 창 상단 Toolbar의 +버튼을 통해 친구추가할 수 있습니다.<br>
+<br>
 친구추가는 3가지 경우로 나뉩니다.<br>
 ㄱ. 새로운 친구를 검색한 경우<br>
 ㄴ. 이미 존재하는 친구를 검색한 경우<br>
 ㄷ. 자신을 검색한 경우<br>
- ㄱ,ㄴ,ㄷ 모두 다른 View를 보여줍니다.<br>
+<br>
+ ㄱ,ㄴ,ㄷ 모두 다른 View를 보여줍니다.<br><br>
 
-2. 목록에서 이름 검색<br>
-![searchFriends](https://user-images.githubusercontent.com/66777885/101213632-00cc3080-36be-11eb-9dd9-2864dea4036f.gif)<br>
+2. 목록에서 이름 검색<br><br>
+![searchFriends](https://user-images.githubusercontent.com/66777885/101213632-00cc3080-36be-11eb-9dd9-2864dea4036f.gif)<br><br>
 
 추가되어있는 친구 목록에서 친구의 이름을 통해 찾을 수 있습니다.<br>
 SearchView에 OnQueryTextListener를 추가하고<br>
-onQueryTextChange를 override하여 입력된 문자가 변경될때마다 검색결과를 보여줍니다.<br>
+onQueryTextChange를 override하여 입력된 문자가 변경될때마다 검색결과를 보여줍니다.<br><br>
 
 #### 채팅
 ![chatNreadCheck](https://user-images.githubusercontent.com/66777885/101208859-248b7880-36b6-11eb-83ff-1dca91277dc7.gif) <br>
