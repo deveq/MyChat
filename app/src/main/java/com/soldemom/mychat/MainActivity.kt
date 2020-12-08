@@ -1,21 +1,18 @@
 package com.soldemom.mychat
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -24,7 +21,6 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.soldemom.mychat.Model.User
@@ -36,7 +32,6 @@ import com.soldemom.mychat.main.fragments.SettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_friends_list.view.*
 import kotlinx.android.synthetic.main.set_id_layout.view.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -91,9 +86,6 @@ class MainActivity : AppCompatActivity() {
 
         FieldValue.serverTimestamp()
         ServerValue.TIMESTAMP
-
-
-
 
 
     }
@@ -199,7 +191,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-
 
         }
         
