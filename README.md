@@ -32,8 +32,7 @@ Android측 :
     
 서버측 :  
 1. SpringBoot
-2. GSON
-3. Firebase-admin
+2. Firebase-admin
 
 ### 완성화면
 #### 가입 및 로그인<br>
